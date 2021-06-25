@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.Shenzhen-Haotek-Technology-Co-Limited'
 
 android {
     // http://tools.android.com/tech-docs/new-build-system/tips
@@ -11,7 +13,7 @@ android {
         abortOnError false
     }
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdkVersion
     }
     buildTypes {
@@ -23,7 +25,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 apply from: new File(rootProject.projectDir, "tools/gradle-on-demand.gradle");

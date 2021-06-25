@@ -50,6 +50,96 @@ dependencies {
  - ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
  - brew install git
 
+### HaoTek Build Environment
+
+- Common
+ - macOS Big Sur 11.4
+- Android
+ - [NDK android-ndk-r14b](http://developer.android.com/tools/sdk/ndk/index.html)
+ - Android Studio 4.2.1
+ - Gradle 2.14.1
+- iOS
+ - Xcode 12.5.1 (12E507)
+- [HomeBrew](http://brew.sh)
+ - ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+ - brew install git
+
+### Build Android
+
+* [A/libc: Fatal signal 11 (SIGSEGV), code 2 (SEGV_ACCERR)](https://github.com/bilibili/ijkplayer/issues/5243)
+
+```bash
+cd config
+rm module.sh
+ln -s module-default.sh module.sh
+cd android/contrib
+```
+
+* [Unknown option "--disable-ffserver"](https://github.com/bilibili/ijkplayer/issues/4690)
+
+`config/module.sh`
+
+```bash
+# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-vda"
+# export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-ffserver"
+```
+
+* [error: 'x0000000' undeclared (first use in this function)](https://github.com/bilibili/ijkplayer/issues/4093)
+
+`module-default.sh`
+
+```bash
+export COMMON_FF_CFG_FLAGS="$COMMON_FF_CFG_FLAGS --disable-linux-perf"
+```
+
+* jdk 11
+
+```
+Could not determine java version from '11.0.8'.
+
+The project uses Gradle version which is incompatible with Studio running on Java 10 or newer.
+See details at https://github.com/gradle/gradle/issues/8431
+Possible solution:
+ - Upgrade Gradle wrapper to 4.8.1 version and re-import the project
+```
+
+* Error:Flavor 'all64' has no flavor dimension
+
+update gradle
+
+* Gradle
+
+```
+Configuration 'all32Compile' is obsolete and has been replaced with 'all32Implementation' and 'all32Api'.
+It will be removed in version 7.0 of the Android Gradle plugin.
+For more information, see http://d.android.com/r/tools/update-dependency-configurations.html.
+```
+
+`build.gradle(:ijkplayer-example)`
+
+all32Compile -> implementation
+all64Compile -> implementation
+
+* "> Could not find com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7."
+
+`build.gradle(ijkplayer)`
+
+```gradle
+buildscript / allprojects {
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5"
+    }
+}
+```
+
 ### Latest Changes
 - [NEWS.md](NEWS.md)
 
